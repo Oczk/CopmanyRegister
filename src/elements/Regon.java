@@ -7,7 +7,7 @@ public class Regon {
 
     private int[] numberArr;
 
-    Regon(String number) {
+    public Regon(String number) {
         this.number = number;
         numberArr = new int[number.length()];
         parseNumberToArr(number);

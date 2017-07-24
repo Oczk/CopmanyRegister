@@ -5,7 +5,7 @@ public class City {
     private String zipCode;
     public boolean isZipCodeCorrect;
 
-    City(String name) {
+    public City(String name) {
         this.cityName = name;
     }
 

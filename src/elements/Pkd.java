@@ -4,23 +4,23 @@ public class Pkd {
     public String symbol;
     public boolean isSymbolCorrect;
 
-    public Pkd(String symbol){
+    public Pkd(String symbol) {
         this.symbol = symbol;
         isSymbolCorrect = checkIsSymbolCorrect();
     }
 
 
     private boolean checkIsSymbolCorrect() {
-        if(symbol.length() != 5){
+        if (symbol.length() != 5) {
             return false;
         }
 
-        if(Integer.parseInt(symbol) < 20000 && Integer.parseInt(symbol) > 50000){
+        if (Integer.parseInt(symbol) < 20000 && Integer.parseInt(symbol) > 50000) {
             return false;
         }
 
-        for(int i=0; i<symbol.length(); ++i){
-            if(!isThisADigit(symbol.charAt(i))){
+        for (int i = 0; i < symbol.length(); ++i) {
+            if (!isThisADigit(symbol.charAt(i))) {
                 return false;
             }
         }

@@ -4,7 +4,7 @@ public class ShortName {
     public String name;
     public boolean isNameCorrect;
 
-    ShortName(String name) {
+    public ShortName(String name) {
         this.name = name;
         isNameCorrect = checkIsNameCorrect();
     }
