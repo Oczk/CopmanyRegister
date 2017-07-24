@@ -1,5 +1,7 @@
 package GUI;
 
+import company.CompanyData;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,8 +9,8 @@ import java.awt.event.ActionListener;
 
 public class ButtonPanel extends JPanel implements ActionListener {
 
-    private static final int HEIGHT = 64;
-    private static final int WIDTH = 512;
+    private static final int HEIGHT = 128;
+    private static final int WIDTH = 1024;
 
     private JButton checkButton;
     private JButton saveButton;
@@ -19,11 +21,9 @@ public class ButtonPanel extends JPanel implements ActionListener {
     private JTextField zipCodeField;
     private JTextField pkdField;
 
-    private JLabel regon;
-    private JLabel name;
-    private JLabel city;
-    private JLabel zipCode;
-    private JLabel pkd;
+    private JLabel msg;
+
+    private CompanyData data;
 
     ButtonPanel() {
         //set buttons
@@ -38,11 +38,12 @@ public class ButtonPanel extends JPanel implements ActionListener {
         pkdField = new JTextField();
 
         //set labels
-        regon = new JLabel("Numer REGON:");
-        name = new JLabel("Skrocona nazwa: ");
-        city = new JLabel("Miejscowosc: ");
-        zipCode = new JLabel("Kod pocztowy: ");
-        pkd = new JLabel("Symbol PKD: ");
+        JLabel regon = new JLabel("Numer REGON:");
+        JLabel name = new JLabel("Skrocona nazwa: ");
+        JLabel city = new JLabel("Miejscowosc: ");
+        JLabel zipCode = new JLabel("Kod pocztowy: ");
+        JLabel pkd = new JLabel("Symbol PKD: ");
+        msg = new JLabel();
 
         //set listeners
         checkButton.addActionListener(this);
@@ -54,8 +55,9 @@ public class ButtonPanel extends JPanel implements ActionListener {
         pkdField.addActionListener(this);
 
         //set layout
-        setLayout(new GridLayout(2, 2));
+        setLayout(new GridLayout(6, 2));
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
         add(regon);
         add(regonField);
         add(name);
@@ -69,6 +71,13 @@ public class ButtonPanel extends JPanel implements ActionListener {
 
         add(checkButton);
         add(saveButton);
+
+
+        add(msg);
+
+        saveButton.setVisible(false);
+
+        data = new CompanyData();
     }
 
 
@@ -77,20 +86,36 @@ public class ButtonPanel extends JPanel implements ActionListener {
         Object source = e.getSource();
 
         if (source == checkButton) {
-            //todo with check button
+            data.checkDataCorrectness();
+            if(data.dataCorrectness){
+                msg.setText("Dane poprawne");
+                saveButton.setVisible(true);
+            } else {
+                msg.setText(data.dataCorrectnessMsg);
+                data.clear();
+            }
 
         } else if (source == saveButton) {
-            //todo with save button
+            saveToXml();
         } else if (source == regonField) {
+            data.setRegon(regonField.getText());
 
         } else if (source == nameField) {
+            data.setShortName(nameField.getText());
 
         } else if (source == cityField){
+            data.setCity(cityField.getText());
 
         } else if (source == zipCodeField){
+            data.setZipCode(zipCodeField.getText());
 
         } else if (source == pkdField){
-
+            data.setPkd(pkdField.getText());
         }
+    }
+
+    private void saveToXml(){
+        //todo class XMLWriter and new XMLWriter(CompanyData data)
+
     }
 }

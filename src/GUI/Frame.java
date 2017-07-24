@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Frame extends JFrame{
 
@@ -11,6 +12,7 @@ public class Frame extends JFrame{
         add(buttonPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         pack();
         setVisible(true);
     }
