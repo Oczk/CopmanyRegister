@@ -14,6 +14,11 @@ public class Regon {
         this.isNumberCorrect = checkIsNumberCorrect();
     }
 
+    public Regon(){
+        this.number = "";
+        this.isNumberCorrect = false;
+    }
+
     private void parseNumberToArr(String number) {
         for (int i = 0; i < number.length(); ++i) {
             this.numberArr[i] = Character.getNumericValue(number.charAt(i));
@@ -23,8 +28,10 @@ public class Regon {
     private boolean checkIsNumberCorrect() {
         if(numberArr.length == 9) {
             return calcControlSum() == numberArr[8];
-        } else {
+        } else if (numberArr.length == 14){
             return calcControlSum() == numberArr[13];
+        } else {
+            return false;
         }
     }
 

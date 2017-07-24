@@ -9,6 +9,10 @@ public class City {
         this.cityName = name;
     }
 
+    public City(){
+        this.cityName = "";
+    }
+
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
         isZipCodeCorrect = checkIsZipCodeCorrect();

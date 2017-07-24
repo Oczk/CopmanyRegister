@@ -9,6 +9,11 @@ public class ShortName {
         isNameCorrect = checkIsNameCorrect();
     }
 
+    public ShortName(){
+        this.name = "";
+        this.isNameCorrect = false;
+    }
+
     private boolean checkIsNameCorrect() {
         if (name.length() > 50 || name.length() == 0) {
             return false;

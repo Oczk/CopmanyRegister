@@ -9,13 +9,18 @@ public class Pkd {
         isSymbolCorrect = checkIsSymbolCorrect();
     }
 
+    public Pkd(){
+        this.symbol = "";
+        this.isSymbolCorrect = false;
+    }
+
 
     private boolean checkIsSymbolCorrect() {
         if (symbol.length() != 5) {
             return false;
         }
 
-        if (Integer.parseInt(symbol) < 20000 && Integer.parseInt(symbol) > 50000) {
+        if (Integer.parseInt(symbol) < 20000 || Integer.parseInt(symbol) > 50000) {
             return false;
         }
 
