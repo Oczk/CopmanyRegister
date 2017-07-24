@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -43,6 +44,31 @@ public class ButtonPanel extends JPanel implements ActionListener {
         zipCode = new JLabel("Kod pocztowy: ");
         pkd = new JLabel("Symbol PKD: ");
 
+        //set listeners
+        checkButton.addActionListener(this);
+        saveButton.addActionListener(this);
+        regonField.addActionListener(this);
+        nameField.addActionListener(this);
+        cityField.addActionListener(this);
+        zipCodeField.addActionListener(this);
+        pkdField.addActionListener(this);
+
+        //set layout
+        setLayout(new GridLayout(2, 2));
+        setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        add(regon);
+        add(regonField);
+        add(name);
+        add(nameField);
+        add(city);
+        add(cityField);
+        add(zipCode);
+        add(zipCodeField);
+        add(pkd);
+        add(pkdField);
+
+        add(checkButton);
+        add(saveButton);
     }
 
 
