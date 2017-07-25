@@ -1,6 +1,7 @@
 package GUI;
 
 import company.CompanyData;
+import company.XMLWriter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -160,7 +161,7 @@ public class ContentPane extends Container implements ActionListener{
     }
 
     private void saveToXml(){
-        //todo class XMLWriter and new XMLWriter(CompanyData data)
+        XMLWriter xml = new XMLWriter(data);
 
     }
 }
