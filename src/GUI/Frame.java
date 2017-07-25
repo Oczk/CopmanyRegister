@@ -8,8 +8,8 @@ public class Frame extends JFrame{
     public Frame(){
         super("Rejestracja firmy");
 
-        JPanel buttonPanel = new ButtonPanel();
-        add(buttonPanel);
+        Container contentPane = new ContentPane();
+        add(contentPane);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
