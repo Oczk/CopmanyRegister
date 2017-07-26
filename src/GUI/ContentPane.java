@@ -1,18 +1,22 @@
 package GUI;
 
 import company.CompanyData;
-import company.XMLWriter;
+import files.XMLReader;
+import files.XMLWriter;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 
 
 public class ContentPane extends Container implements ActionListener{
 
     private JButton checkButton;
     private JButton saveButton;
+    private JButton loadButton;
 
     private JTextField regonField;
     private JTextField nameField;
@@ -28,6 +32,7 @@ public class ContentPane extends Container implements ActionListener{
         //set buttons
         checkButton = new JButton("Sprawdz");
         saveButton = new JButton("Zapisz");
+        loadButton = new JButton("Wczytaj");
 
         //set text fields
         regonField = new JTextField("", 15);
@@ -48,6 +53,7 @@ public class ContentPane extends Container implements ActionListener{
         //set listeners
         checkButton.addActionListener(this);
         saveButton.addActionListener(this);
+        loadButton.addActionListener(this);
         regonField.addActionListener(this);
         nameField.addActionListener(this);
         cityField.addActionListener(this);
@@ -72,6 +78,7 @@ public class ContentPane extends Container implements ActionListener{
 
         add(checkButton);
         add(saveButton);
+        add(loadButton);
 
         add(msg);
         msg.setLineWrap(true);
@@ -111,7 +118,10 @@ public class ContentPane extends Container implements ActionListener{
         layout.putConstraint(SpringLayout.WEST, checkButton, 5, SpringLayout.WEST, this);
         layout.putConstraint(SpringLayout.NORTH, checkButton, 30, SpringLayout.NORTH, pkd);
 
-        layout.putConstraint(SpringLayout.WEST, saveButton, 5, SpringLayout.EAST, checkButton);
+        layout.putConstraint(SpringLayout.WEST, loadButton, 5, SpringLayout.EAST, checkButton);
+        layout.putConstraint(SpringLayout.NORTH, loadButton, 30, SpringLayout.NORTH, pkdField);
+
+        layout.putConstraint(SpringLayout.WEST, saveButton, 5, SpringLayout.EAST, loadButton);
         layout.putConstraint(SpringLayout.NORTH, saveButton, 30, SpringLayout.NORTH, pkdField);
 
         layout.putConstraint(SpringLayout.WEST, msg, 5, SpringLayout.WEST, this);
@@ -125,6 +135,7 @@ public class ContentPane extends Container implements ActionListener{
 
         data = new CompanyData();
     }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -142,6 +153,8 @@ public class ContentPane extends Container implements ActionListener{
 
         } else if (source == saveButton) {
             saveToXml();
+        } else if (source == loadButton){
+            loadXML();
         } else if (source == regonField) {
             data.setRegon(regonField.getText());
 
@@ -162,6 +175,17 @@ public class ContentPane extends Container implements ActionListener{
 
     private void saveToXml(){
         XMLWriter xml = new XMLWriter(data);
+
+    }
+
+    private void loadXML(){
+        XMLReader xmlReader = new XMLReader();
+
+        regonField.setText(xmlReader.companyData.getRegon());
+        nameField.setText(xmlReader.companyData.getShortName());
+        cityField.setText(xmlReader.companyData.getCity());
+        zipCodeField.setText(xmlReader.companyData.getZipCode());
+        pkdField.setText(xmlReader.companyData.getPkd());
 
     }
 }

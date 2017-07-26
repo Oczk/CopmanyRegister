@@ -1,5 +1,6 @@
-package company;
+package files;
 
+import company.CompanyData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -49,16 +50,32 @@ public class XMLWriter {
             pkd.appendChild(doc.createTextNode(data.getPkd()));
             datas.appendChild(pkd);
 
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(data.getPkd() + ".xml"));
+            StreamResult result = new StreamResult(new File(data.getRegon() + ".xml"));
 
             transformer.transform(source, result);
+
+            /*
+            Frame a = new Frame ();
+            FileDialog fd =new FileDialog(a,"Zapisz",FileDialog.SAVE);
+            fd.setVisible(true);
+            String directory=fd.getDirectory();
+            String file=fd.getFile();
+
+
+            StreamResult result = new StreamResult(new File(directory + "/" + file + ".xml"));
+            transformer.transform(source, result);
+            */
+
+
             System.out.println("file saved");
 
 
-        } catch (ParserConfigurationException | TransformerException e) {
+
+        } catch (ParserConfigurationException | TransformerException e ) {
             e.printStackTrace();
         }
 
