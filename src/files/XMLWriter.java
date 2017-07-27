@@ -4,6 +4,7 @@ import company.CompanyData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,8 +17,17 @@ import java.io.File;
 
 public class XMLWriter {
 
-    public XMLWriter(CompanyData data){
-        //CompanyData data1 = data;
+    private Transformer transformer;
+    private DOMSource source;
+    private StreamResult result;
+    private CompanyData data;
+
+    public XMLWriter(CompanyData data) {
+        this.data = data;
+        writeFile();
+    }
+
+    public void writeFile() {
 
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
@@ -52,32 +62,50 @@ public class XMLWriter {
 
 
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(data.getRegon() + ".xml"));
+            transformer = transformerFactory.newTransformer();
+            source = new DOMSource(doc);
 
+            //saving file
+            File file = new File("Data/" + data.getRegon() + ".xml");
+            result = new StreamResult(file);
+
+            if (file.exists()) {
+
+                System.out.println("plik istnieje");
+                createDialogue();
+
+            } else {
+                saveFile();
+            }
+
+        } catch (ParserConfigurationException | TransformerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveFile() {
+        try {
             transformer.transform(source, result);
-
-            /*
-            Frame a = new Frame ();
-            FileDialog fd =new FileDialog(a,"Zapisz",FileDialog.SAVE);
-            fd.setVisible(true);
-            String directory=fd.getDirectory();
-            String file=fd.getFile();
-
-
-            StreamResult result = new StreamResult(new File(directory + "/" + file + ".xml"));
-            transformer.transform(source, result);
-            */
-
 
             System.out.println("file saved");
 
-
-
-        } catch (ParserConfigurationException | TransformerException e ) {
+        } catch (TransformerException e) {
             e.printStackTrace();
         }
 
     }
+
+    private void createDialogue() {
+        JDialog.setDefaultLookAndFeelDecorated(true);
+        int response = JOptionPane.showConfirmDialog(null, "override?", "confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.NO_OPTION) {
+            System.out.println("plik nie zostal nadpisany");
+        } else if (response == JOptionPane.YES_OPTION) {
+            saveFile();
+            System.out.println("plik nadpisany");
+        } else if (response == JOptionPane.CLOSED_OPTION) {
+            System.out.println("okno zamkniete");
+        }
+    }
+
 }

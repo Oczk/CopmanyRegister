@@ -18,18 +18,34 @@ public class XMLReader {
 
     public CompanyData companyData;
 
-    public XMLReader(){
-        companyData = new CompanyData();
-        Frame a = new Frame ("Okno macierzyste");
+    private String directory;
+    private FileDialog fd;
 
-       //system window to load file
-        FileDialog fd =new FileDialog(a,"Wczytaj",FileDialog.LOAD);
-        // Ewentualnie: FileDialog fd =new FileDialog(a,"Zapisz",FileDialog.SAVE);
+    public XMLReader(CompanyData data) {
+        Frame a = new Frame();
+
+        //system window to load file
+        this.fd = new FileDialog(a, "Wczytaj", FileDialog.LOAD);
         fd.setVisible(true);
-        String directory=fd.getDirectory();
-        String file=fd.getFile();
 
+        this.directory = fd.getDirectory();
+
+        if (directory == null) {
+            //if no new directory is chosen, don't change loaded data
+            this.companyData = data;
+
+        } else {
+
+            loadFile();
+        }
+    }
+
+    private void loadFile(){
+        companyData = new CompanyData();
+
+        String file = fd.getFile();
         File xmlFile = new File(directory + file);
+
         //loading data
         try {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -41,18 +57,19 @@ public class XMLReader {
             NodeList nodeList = document.getElementsByTagName("Dane");
 
 
-            for(int i=0; i<nodeList.getLength(); ++i){
+            for (int i = 0; i < nodeList.getLength(); ++i) {
 
                 Node node = nodeList.item(i);
 
-                if(node.getNodeType() == Node.ELEMENT_NODE){
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
                     Element element = (Element) node;
-
-                    companyData.setRegon(element.getElementsByTagName("REGON").item(0).getTextContent());
-                    companyData.setShortName(element.getElementsByTagName("SkroconaNazwa").item(0).getTextContent());
-                    companyData.setCity(element.getElementsByTagName("Miasto").item(0).getTextContent());
-                    companyData.setZipCode(element.getElementsByTagName("KodPocztowy").item(0).getTextContent());
-                    companyData.setPkd(element.getElementsByTagName("PKD").item(0).getTextContent());
+                    if (element.getElementsByTagName("REGON").item(0).getTextContent() != null) {
+                        companyData.setRegon(element.getElementsByTagName("REGON").item(0).getTextContent());
+                        companyData.setShortName(element.getElementsByTagName("SkroconaNazwa").item(0).getTextContent());
+                        companyData.setCity(element.getElementsByTagName("Miasto").item(0).getTextContent());
+                        companyData.setZipCode(element.getElementsByTagName("KodPocztowy").item(0).getTextContent());
+                        companyData.setPkd(element.getElementsByTagName("PKD").item(0).getTextContent());
+                    }
                 }
 
             }
@@ -62,12 +79,12 @@ public class XMLReader {
             e.printStackTrace();
         }
 
-        if(companyData.getPkd()!= null && companyData.getRegon() != null && companyData.getZipCode() != null && companyData.getShortName() != null){
+        if (companyData.getPkd() != null && companyData.getRegon() != null && companyData.getZipCode() != null && companyData.getShortName() != null) {
             System.out.println("Dane wczytane pomyslnie");
         }
         System.out.println("Wybrano plik: " + xmlFile.getAbsolutePath());
-        System.out.println("w katalogu: "+ directory);
-        System.out.println("Ścieżka: "+ directory + file);
+        System.out.println("w katalogu: " + directory);
+        System.out.println("Ścieżka: " + directory + file);
     }
 }
 

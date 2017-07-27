@@ -6,13 +6,11 @@ import files.XMLWriter;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 
-public class ContentPane extends Container implements ActionListener{
+public class ContentPane extends Container implements FocusListener{
 
     private JButton checkButton;
     private JButton saveButton;
@@ -51,14 +49,14 @@ public class ContentPane extends Container implements ActionListener{
         msg = new JTextArea(2, 28);
 
         //set listeners
-        checkButton.addActionListener(this);
-        saveButton.addActionListener(this);
-        loadButton.addActionListener(this);
-        regonField.addActionListener(this);
-        nameField.addActionListener(this);
-        cityField.addActionListener(this);
-        zipCodeField.addActionListener(this);
-        pkdField.addActionListener(this);
+        checkButton.addFocusListener(this);
+        saveButton.addFocusListener(this);
+        loadButton.addFocusListener(this);
+        regonField.addFocusListener(this);
+        nameField.addFocusListener(this);
+        cityField.addFocusListener(this);
+        zipCodeField.addFocusListener(this);
+        pkdField.addFocusListener(this);
 
         //set layout
         SpringLayout layout = new SpringLayout();
@@ -137,12 +135,32 @@ public class ContentPane extends Container implements ActionListener{
     }
 
 
+    private void saveToXml(){
+        new XMLWriter(data);
+
+    }
+
+    private void loadXML(){
+        XMLReader xmlReader = new XMLReader(data);
+
+        regonField.setText(xmlReader.companyData.getRegon());
+        nameField.setText(xmlReader.companyData.getShortName());
+        cityField.setText(xmlReader.companyData.getCity());
+        zipCodeField.setText(xmlReader.companyData.getZipCode());
+        pkdField.setText(xmlReader.companyData.getPkd());
+
+    }
+
+    private Object prevSource;
+    private boolean isSaved= false;
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void focusGained(FocusEvent e) {
         Object source = e.getSource();
 
+        //System.out.println("\nfocus gained " + source);
+
         if (source == checkButton) {
-            data.checkDataCorrectness();
+            focusRequest();
             if(data.dataCorrectness){
                 msg.setText("Dane poprawne");
                 saveButton.setVisible(true);
@@ -150,12 +168,30 @@ public class ContentPane extends Container implements ActionListener{
                 msg.setText(data.dataCorrectnessMsg);
                 data.clear();
             }
+            prevSource = source;
 
         } else if (source == saveButton) {
-            saveToXml();
-        } else if (source == loadButton){
-            loadXML();
-        } else if (source == regonField) {
+            if(!isSaved) {
+                saveToXml();
+                isSaved = true;
+            }
+            prevSource = source;
+
+        } else if (source == loadButton) {
+            if(source != prevSource) {
+                loadXML();
+                prevSource = source;
+            }
+        }
+
+    }
+
+    @Override
+    public void focusLost(FocusEvent e) {
+        Object source = e.getSource();
+        //System.out.println("\nfocus lost " + source);
+
+        if (source == regonField) {
             data.setRegon(regonField.getText());
 
         } else if (source == nameField) {
@@ -169,24 +205,17 @@ public class ContentPane extends Container implements ActionListener{
 
         } else if (source == pkdField){
             data.setPkd(pkdField.getText());
+        } else if( source == saveButton){
+            isSaved = false;
         }
-
     }
 
-    private void saveToXml(){
-        XMLWriter xml = new XMLWriter(data);
-
-    }
-
-    private void loadXML(){
-        XMLReader xmlReader = new XMLReader();
-
-        regonField.setText(xmlReader.companyData.getRegon());
-        nameField.setText(xmlReader.companyData.getShortName());
-        cityField.setText(xmlReader.companyData.getCity());
-        zipCodeField.setText(xmlReader.companyData.getZipCode());
-        pkdField.setText(xmlReader.companyData.getPkd());
-
+    private void focusRequest(){
+        data.checkDataCorrectness();
+        regonField.requestFocus();
+        nameField.requestFocus();
+        zipCodeField.requestFocus();
+        pkdField.requestFocus();
     }
 }
 
